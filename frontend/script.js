@@ -59,31 +59,19 @@ const finalSelectedFilter =
 // ==========================================
 
 const photoImages = [
-
     document.getElementById("photo1"),
-
     document.getElementById("photo2"),
-
     document.getElementById("photo3")
-
 ];
-
 
 const photoDots = [
-
     document.getElementById("dot1"),
-
     document.getElementById("dot2"),
-
     document.getElementById("dot3")
-
 ];
 
-
 const filterButtons =
-    document.querySelectorAll(
-        ".filter-option"
-    );
+    document.querySelectorAll(".filter-option");
 
 
 // ==========================================
@@ -115,7 +103,17 @@ startCameraButton.addEventListener(
                 await navigator.mediaDevices.getUserMedia({
 
                     video: {
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 720
+                        },
+
                         facingMode: "user"
+
                     },
 
                     audio: false
@@ -125,6 +123,18 @@ startCameraButton.addEventListener(
 
             camera.srcObject =
                 cameraStream;
+
+
+            camera.setAttribute(
+                "playsinline",
+                ""
+            );
+
+
+            camera.setAttribute(
+                "autoplay",
+                ""
+            );
 
 
             startCameraButton.disabled =
@@ -142,7 +152,11 @@ startCameraButton.addEventListener(
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                "Camera error:",
+                error
+            );
+
 
             status.textContent =
                 "Unable to access camera. Please allow camera permission.";
@@ -181,10 +195,12 @@ startSessionButton.addEventListener(
         resetPhotos();
 
 
-        finalPhoto = null;
+        finalPhoto =
+            null;
 
 
-        finalPreview.src = "";
+        finalPreview.src =
+            "";
 
 
         finalSection.classList.remove(
@@ -199,6 +215,14 @@ startSessionButton.addEventListener(
 
         finalizeButton.disabled =
             true;
+
+
+        applyFilterButton.disabled =
+            false;
+
+
+        savePhotoButton.disabled =
+            false;
 
 
         sessionRunning =
@@ -216,7 +240,9 @@ startSessionButton.addEventListener(
         await wait(1000);
 
 
+        // ==================================
         // PHOTO 1
+        // ==================================
 
         await countdown();
 
@@ -226,7 +252,9 @@ startSessionButton.addEventListener(
         await wait(1500);
 
 
+        // ==================================
         // PHOTO 2
+        // ==================================
 
         status.textContent =
             "Get ready for Photo 2!";
@@ -243,7 +271,9 @@ startSessionButton.addEventListener(
         await wait(1500);
 
 
+        // ==================================
         // PHOTO 3
+        // ==================================
 
         status.textContent =
             "Get ready for Photo 3!";
@@ -260,7 +290,9 @@ startSessionButton.addEventListener(
         await wait(800);
 
 
+        // ==================================
         // FINISHED
+        // ==================================
 
         sessionRunning =
             false;
@@ -287,50 +319,62 @@ startSessionButton.addEventListener(
 
 function countdown() {
 
-    return new Promise((resolve) => {
+    return new Promise(
+        (resolve) => {
 
-        let number = 3;
-
-
-        showCountdown(number);
+            let number = 3;
 
 
-        const timer =
-            setInterval(() => {
-
-                number--;
+            showCountdown(number);
 
 
-                if (number > 0) {
+            const timer =
+                setInterval(
+                    () => {
 
-                    showCountdown(number);
-
-                }
-
-                else {
-
-                    clearInterval(timer);
+                        number--;
 
 
-                    showCountdownIcon();
+                        if (number > 0) {
+
+                            showCountdown(
+                                number
+                            );
+
+                        }
+
+                        else {
+
+                            clearInterval(
+                                timer
+                            );
 
 
-                    setTimeout(() => {
-
-                        countdownElement.classList.remove(
-                            "show"
-                        );
+                            showCountdownIcon();
 
 
-                        resolve();
+                            setTimeout(
+                                () => {
 
-                    }, 700);
+                                    countdownElement.classList.remove(
+                                        "show"
+                                    );
 
-                }
 
-            }, 1000);
+                                    resolve();
 
-    });
+                                },
+                                700
+                            );
+
+                        }
+
+                    },
+                    1000
+                );
+
+        }
+    );
 
 }
 
@@ -416,7 +460,9 @@ function capturePhoto(index) {
         canvas.getContext("2d");
 
 
-    // Mirror the image
+    // ==================================
+    // MIRROR SELFIE PHOTO
+    // ==================================
 
     context.save();
 
@@ -449,7 +495,9 @@ function capturePhoto(index) {
     context.restore();
 
 
-    // Convert image
+    // ==================================
+    // CONVERT PHOTO
+    // ==================================
 
     const photo =
         canvas.toDataURL(
@@ -513,8 +561,6 @@ finalizeButton.addEventListener(
 
         }
 
-
-        // Generate actual filter previews
 
         generateFilterPreviews();
 
@@ -586,7 +632,9 @@ function generateFilterPreviews() {
 
 
                     preview.style.filter =
-                        getCanvasFilter(filter);
+                        getCanvasFilter(
+                            filter
+                        );
 
                 }
 
@@ -744,17 +792,20 @@ applyFilterButton.addEventListener(
             );
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            finalSection.scrollIntoView({
+                finalSection.scrollIntoView({
 
-                behavior: "smooth",
+                    behavior: "smooth",
 
-                block: "center"
+                    block: "center"
 
-            });
+                });
 
-        }, 300);
+            },
+            300
+        );
 
 
         status.textContent =
@@ -770,325 +821,359 @@ applyFilterButton.addEventListener(
 
 function createFilteredPhotoStrip() {
 
-    return new Promise((resolve) => {
+    return new Promise(
+        (resolve) => {
 
-        const stripCanvas =
-            document.createElement("canvas");
+            const stripCanvas =
+                document.createElement(
+                    "canvas"
+                );
 
 
-        const width =
-            700;
+            const width =
+                700;
 
 
-        const photoWidth =
-            620;
+            const photoWidth =
+                620;
 
 
-        const photoHeight =
-            465;
+            const photoHeight =
+                465;
 
 
-        const sidePadding =
-            40;
+            const sidePadding =
+                40;
 
 
-        const topPadding =
-            55;
+            const topPadding =
+                55;
 
 
-        const gap =
-            25;
+            const gap =
+                25;
 
 
-        const bottomSpace =
-            125;
+            const bottomSpace =
+                125;
 
 
-        const totalHeight =
+            const totalHeight =
 
-            topPadding +
+                topPadding +
 
-            (photoHeight * 3) +
+                (photoHeight * 3) +
 
-            (gap * 2) +
+                (gap * 2) +
 
-            bottomSpace;
+                bottomSpace;
 
 
-        stripCanvas.width =
-            width;
+            stripCanvas.width =
+                width;
 
 
-        stripCanvas.height =
-            totalHeight;
+            stripCanvas.height =
+                totalHeight;
 
 
-        const context =
-            stripCanvas.getContext("2d");
+            const context =
+                stripCanvas.getContext(
+                    "2d"
+                );
 
 
-        // Background
+            // ==================================
+            // BACKGROUND
+            // ==================================
 
-        context.fillStyle =
-            "#f8f1e7";
+            context.fillStyle =
+                "#f8f1e7";
 
 
-        context.fillRect(
+            context.fillRect(
 
-            0,
-            0,
-            width,
-            totalHeight
+                0,
+                0,
+                width,
+                totalHeight
 
-        );
+            );
 
 
-        // Title
+            // ==================================
+            // TITLE
+            // ==================================
 
-        context.fillStyle =
-            "#4b382c";
+            context.fillStyle =
+                "#4b382c";
 
 
-        context.textAlign =
-            "center";
+            context.textAlign =
+                "center";
 
 
-        context.font =
-            "bold 28px Georgia";
+            context.font =
+                "bold 28px Georgia";
 
 
-        context.fillText(
+            context.fillText(
 
-            "JEM'S PHOTOBOOTH",
+                "JEM'S PHOTOBOOTH",
 
-            width / 2,
+                width / 2,
 
-            34
+                34
 
-        );
+            );
 
 
-        const images = [];
+            const images = [];
 
+            let loaded = 0;
 
-        let loaded = 0;
 
+            capturedPhotos.forEach(
+                (photo, index) => {
 
-        capturedPhotos.forEach(
-            (photo, index) => {
+                    const image =
+                        new Image();
 
-                const image =
-                    new Image();
 
+                    image.onload =
+                        () => {
 
-                image.onload = () => {
+                            loaded++;
 
-                    loaded++;
 
+                            if (
+                                loaded === 3
+                            ) {
 
-                    if (
-                        loaded === 3
-                    ) {
+                                drawFinalTemplate();
 
-                        drawFinalTemplate();
+                            }
 
-                    }
+                        };
 
-                };
 
+                    image.onerror =
+                        () => {
 
-                image.src =
-                    photo;
+                            console.error(
+                                `Unable to load photo ${index + 1}.`
+                            );
 
+                        };
 
-                images[index] =
-                    image;
 
-            }
-        );
+                    image.src =
+                        photo;
 
 
-        function drawFinalTemplate() {
-
-            images.forEach(
-                (image, index) => {
-
-                    const y =
-
-                        topPadding +
-
-                        (
-                            index *
-                            (
-                                photoHeight +
-                                gap
-                            )
-                        );
-
-
-                    // White border
-
-                    context.fillStyle =
-                        "#ffffff";
-
-
-                    context.fillRect(
-
-                        sidePadding - 7,
-
-                        y - 7,
-
-                        photoWidth + 14,
-
-                        photoHeight + 14
-
-                    );
-
-
-                    // Apply filter
-
-                    context.filter =
-                        getCanvasFilter(
-                            selectedFilter
-                        );
-
-
-                    context.drawImage(
-
-                        image,
-
-                        sidePadding,
-
-                        y,
-
-                        photoWidth,
-
-                        photoHeight
-
-                    );
-
-
-                    context.filter =
-                        "none";
-
-
-                    // Photo border
-
-                    context.strokeStyle =
-                        "#b9a28d";
-
-
-                    context.lineWidth =
-                        2;
-
-
-                    context.strokeRect(
-
-                        sidePadding,
-
-                        y,
-
-                        photoWidth,
-
-                        photoHeight
-
-                    );
+                    images[index] =
+                        image;
 
                 }
             );
 
 
-            // Decorative line
+            function drawFinalTemplate() {
 
-            const lineY =
-                totalHeight - 82;
+                images.forEach(
+                    (image, index) => {
 
+                        const y =
 
-            context.strokeStyle =
-                "#b9a28d";
+                            topPadding +
 
-
-            context.lineWidth =
-                1;
-
-
-            context.beginPath();
-
-
-            context.moveTo(
-                180,
-                lineY
-            );
+                            (
+                                index *
+                                (
+                                    photoHeight +
+                                    gap
+                                )
+                            );
 
 
-            context.lineTo(
-                520,
-                lineY
-            );
+                        // ==================================
+                        // WHITE BORDER
+                        // ==================================
+
+                        context.fillStyle =
+                            "#ffffff";
 
 
-            context.stroke();
+                        context.fillRect(
+
+                            sidePadding - 7,
+
+                            y - 7,
+
+                            photoWidth + 14,
+
+                            photoHeight + 14
+
+                        );
 
 
-            // Bottom text
+                        // ==================================
+                        // APPLY FILTER
+                        // ==================================
 
-            context.fillStyle =
-                "#6b4f3a";
-
-
-            context.font =
-                "18px Georgia";
-
-
-            context.fillText(
-
-                "three moments • one memory",
-
-                width / 2,
-
-                totalHeight - 50
-
-            );
+                        context.filter =
+                            getCanvasFilter(
+                                selectedFilter
+                            );
 
 
-            // Date
+                        context.drawImage(
 
-            context.font =
-                "12px Arial";
+                            image,
 
+                            sidePadding,
 
-            context.fillStyle =
-                "#8b7462";
+                            y,
 
+                            photoWidth,
 
-            context.fillText(
+                            photoHeight
 
-                new Date().toLocaleDateString(),
-
-                width / 2,
-
-                totalHeight - 25
-
-            );
+                        );
 
 
-            // Convert to image
+                        context.filter =
+                            "none";
 
-            const result =
-                stripCanvas.toDataURL(
 
-                    "image/jpeg",
+                        // ==================================
+                        // PHOTO BORDER
+                        // ==================================
 
-                    0.95
+                        context.strokeStyle =
+                            "#b9a28d";
+
+
+                        context.lineWidth =
+                            2;
+
+
+                        context.strokeRect(
+
+                            sidePadding,
+
+                            y,
+
+                            photoWidth,
+
+                            photoHeight
+
+                        );
+
+                    }
+                );
+
+
+                // ==================================
+                // DECORATIVE LINE
+                // ==================================
+
+                const lineY =
+                    totalHeight - 82;
+
+
+                context.strokeStyle =
+                    "#b9a28d";
+
+
+                context.lineWidth =
+                    1;
+
+
+                context.beginPath();
+
+
+                context.moveTo(
+                    180,
+                    lineY
+                );
+
+
+                context.lineTo(
+                    520,
+                    lineY
+                );
+
+
+                context.stroke();
+
+
+                // ==================================
+                // BOTTOM TEXT
+                // ==================================
+
+                context.fillStyle =
+                    "#6b4f3a";
+
+
+                context.font =
+                    "18px Georgia";
+
+
+                context.fillText(
+
+                    "three moments • one memory",
+
+                    width / 2,
+
+                    totalHeight - 50
 
                 );
 
 
-            resolve(result);
+                // ==================================
+                // DATE
+                // ==================================
+
+                context.font =
+                    "12px Arial";
+
+
+                context.fillStyle =
+                    "#8b7462";
+
+
+                context.fillText(
+
+                    new Date().toLocaleDateString(),
+
+                    width / 2,
+
+                    totalHeight - 25
+
+                );
+
+
+                // ==================================
+                // CONVERT TO JPEG
+                // ==================================
+
+                const result =
+                    stripCanvas.toDataURL(
+
+                        "image/jpeg",
+
+                        0.95
+
+                    );
+
+
+                resolve(result);
+
+            }
 
         }
-
-    });
+    );
 
 }
 
@@ -1211,7 +1296,7 @@ function getCanvasFilter(filter) {
 
 
 // ==========================================
-// SAVE FINAL PHOTO
+// SAVE FINAL PHOTO TO USER'S DEVICE
 // ==========================================
 
 savePhotoButton.addEventListener(
@@ -1235,64 +1320,248 @@ savePhotoButton.addEventListener(
 
 
             status.textContent =
-                "Saving your photobooth strip...";
+                "Preparing your photo strip...";
 
+
+            // ==================================
+            // CREATE FILE NAME
+            // ==================================
+
+            const now =
+                new Date();
+
+
+            const timestamp =
+                now
+                    .toISOString()
+                    .replace(
+                        /[:.]/g,
+                        "-"
+                    );
+
+
+            const filename =
+                `Jems-Photobooth-${timestamp}.jpg`;
+
+
+            // ==================================
+            // CONVERT FINAL PHOTO TO BLOB
+            // ==================================
 
             const response =
-                await fetch(
-                    "/api/photos",
-                    {
+                await fetch(finalPhoto);
 
-                        method: "POST",
 
-                        headers: {
+            if (!response.ok) {
 
-                            "Content-Type":
-                                "application/json"
+                throw new Error(
+                    "Unable to read the final photo."
+                );
 
-                        },
+            }
 
-                        body: JSON.stringify({
 
-                            image:
-                                finalPhoto
+            const blob =
+                await response.blob();
 
-                        })
 
-                    }
+            if (
+                !blob ||
+                blob.size === 0
+            ) {
+
+                throw new Error(
+                    "The generated photo is empty."
+                );
+
+            }
+
+
+            // ==================================
+            // USE SAVE AS DIALOG IF AVAILABLE
+            // ==================================
+
+            if (
+                typeof window.showSaveFilePicker ===
+                "function"
+            ) {
+
+                const fileHandle =
+                    await window.showSaveFilePicker({
+
+                        suggestedName:
+                            filename,
+
+                        types: [
+
+                            {
+                                description:
+                                    "JPEG Image",
+
+                                accept: {
+
+                                    "image/jpeg":
+                                        [".jpg"]
+
+                                }
+
+                            }
+
+                        ]
+
+                    });
+
+
+                const writable =
+                    await fileHandle.createWritable();
+
+
+                await writable.write(
+                    blob
                 );
 
 
-            const result =
-                await response.json();
+                await writable.close();
 
-
-            if (result.success) {
 
                 status.textContent =
-                    "✅ Photobooth strip saved successfully!";
+                    "✅ Photo strip saved successfully!";
+
+
+                savePhotoButton.disabled =
+                    false;
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // FALLBACK DOWNLOAD
+            // ==================================
+
+            const downloadURL =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                downloadURL;
+
+
+            link.download =
+                filename;
+
+
+            link.target =
+                "_blank";
+
+
+            link.rel =
+                "noopener";
+
+
+            link.style.display =
+                "none";
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            // ==================================
+            // TRIGGER DOWNLOAD
+            // ==================================
+
+            link.click();
+
+
+            // ==================================
+            // CLEANUP
+            // ==================================
+
+            setTimeout(
+                () => {
+
+                    if (
+                        link.parentNode
+                    ) {
+
+                        link.parentNode.removeChild(
+                            link
+                        );
+
+                    }
+
+
+                    URL.revokeObjectURL(
+                        downloadURL
+                    );
+
+                },
+                3000
+            );
+
+
+            status.textContent =
+                "✅ Photo strip download started!";
+
+
+            setTimeout(
+                () => {
+
+                    savePhotoButton.disabled =
+                        false;
+
+                },
+                1500
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Save error:",
+                error
+            );
+
+
+            // ==================================
+            // USER CANCELLED SAVE DIALOG
+            // ==================================
+
+            if (
+                error.name ===
+                "AbortError"
+            ) {
+
+                status.textContent =
+                    "Save cancelled.";
 
             }
 
             else {
 
                 status.textContent =
-                    "❌ Failed to save photo.";
+                    "❌ Unable to save the photo strip.";
 
-                savePhotoButton.disabled =
-                    false;
+                console.error(
+                    "Full save error:",
+                    error
+                );
 
             }
 
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-
-            status.textContent =
-                "❌ Could not connect to the backend.";
 
             savePhotoButton.disabled =
                 false;
