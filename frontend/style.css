@@ -1,0 +1,1262 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Montserrat:wght@400;500;600;700&display=swap');
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        #efe4d5;
+
+    font-family:
+        'Montserrat',
+        Arial,
+        sans-serif;
+
+    color:
+        #4b382c;
+
+    padding:
+        35px 15px;
+
+}
+
+
+/* ==========================================
+   DECORATIVE BACKGROUND
+========================================== */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    width: 280px;
+
+    height: 280px;
+
+    border: 2px solid rgba(123, 91, 65, 0.15);
+
+    border-radius: 50%;
+
+    top: -100px;
+
+    left: -100px;
+
+    z-index: -1;
+
+}
+
+
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    width: 350px;
+
+    height: 350px;
+
+    border: 2px solid rgba(123, 91, 65, 0.12);
+
+    border-radius: 50%;
+
+    right: -150px;
+
+    bottom: -150px;
+
+    z-index: -1;
+
+}
+
+
+/* ==========================================
+   MAIN CONTAINER
+========================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    margin: auto;
+
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+header {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+    animation:
+        fadeDown 0.8s ease;
+
+}
+
+
+.camera-icon {
+
+    font-size: 42px;
+
+    margin-bottom: 8px;
+
+}
+
+
+header h1 {
+
+    font-family:
+        'DM Serif Display',
+        Georgia,
+        serif;
+
+    font-size: clamp(42px, 7vw, 72px);
+
+    font-weight: 400;
+
+    letter-spacing: 1px;
+
+    color:
+        #4b382c;
+
+}
+
+
+header p {
+
+    margin-top: 8px;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+
+    color:
+        #806b58;
+
+}
+
+
+/* ==========================================
+   CAMERA SECTION
+========================================== */
+
+.camera-section {
+
+    background:
+        #f8f1e7;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 35px rgba(74, 52, 37, 0.12);
+
+    margin-bottom: 25px;
+
+}
+
+
+.camera-frame {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 750px;
+
+    margin: auto;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background: #2d2520;
+
+    border: 8px solid #ffffff;
+
+    box-shadow:
+        0 8px 25px rgba(65, 43, 30, 0.2);
+
+}
+
+
+video {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 350px;
+
+    object-fit: cover;
+
+    transform: scaleX(-1);
+
+}
+
+
+canvas {
+
+    display: none;
+
+}
+
+
+/* ==========================================
+   COUNTDOWN
+========================================== */
+
+.countdown {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.5);
+
+    opacity: 0;
+
+    color: white;
+
+    font-size: 110px;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.5);
+
+    pointer-events: none;
+
+}
+
+
+.countdown.show {
+
+    animation:
+        countdownPop 0.9s ease forwards;
+
+}
+
+
+/* ==========================================
+   CONTROLS
+========================================== */
+
+.controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+button {
+
+    font-family:
+        'Montserrat',
+        sans-serif;
+
+    cursor: pointer;
+
+}
+
+
+.primary-button,
+.finalize-button,
+.apply-filter-button {
+
+    border: none;
+
+    background:
+        #684c39;
+
+    color:
+        white;
+
+    padding:
+        14px 24px;
+
+    border-radius:
+        10px;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.5px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.primary-button:hover,
+.finalize-button:hover,
+.apply-filter-button:hover {
+
+    background:
+        #4f392b;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(75, 56, 44, 0.2);
+
+}
+
+
+button:disabled {
+
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none !important;
+
+    box-shadow:
+        none !important;
+
+}
+
+
+/* ==========================================
+   PROGRESS
+========================================== */
+
+.photo-progress {
+
+    background:
+        #f8f1e7;
+
+    padding:
+        22px;
+
+    border-radius:
+        18px;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.progress-title {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom:
+        12px;
+
+    font-size:
+        14px;
+
+}
+
+
+.progress-bar {
+
+    width:
+        100%;
+
+    height:
+        9px;
+
+    background:
+        #dfd1c2;
+
+    border-radius:
+        20px;
+
+    overflow:
+        hidden;
+
+}
+
+
+.progress-fill {
+
+    width:
+        0%;
+
+    height:
+        100%;
+
+    background:
+        #684c39;
+
+    transition:
+        width 0.5s ease;
+
+}
+
+
+.photo-dots {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    gap:
+        14px;
+
+    margin-top:
+        17px;
+
+}
+
+
+.photo-dot {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid #bda995;
+
+    border-radius:
+        50%;
+
+    font-size:
+        12px;
+
+    transition:
+        0.3s ease;
+
+}
+
+
+.photo-dot.active {
+
+    background:
+        #684c39;
+
+    color:
+        white;
+
+    border-color:
+        #684c39;
+
+    transform:
+        scale(1.1);
+
+}
+
+
+/* ==========================================
+   CAPTURED PHOTOS
+========================================== */
+
+.captured-section {
+
+    background:
+        #f8f1e7;
+
+    padding:
+        30px;
+
+    border-radius:
+        20px;
+
+    text-align:
+        center;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+h2 {
+
+    font-family:
+        'DM Serif Display',
+        Georgia,
+        serif;
+
+    font-size:
+        34px;
+
+    font-weight:
+        400;
+
+    margin-bottom:
+        8px;
+
+}
+
+
+.section-description {
+
+    font-size:
+        13px;
+
+    color:
+        #806b58;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.photo-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        18px;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.photo-card {
+
+    position:
+        relative;
+
+    aspect-ratio:
+        4 / 3;
+
+    background:
+        #e3d6c8;
+
+    border:
+        7px solid white;
+
+    border-radius:
+        12px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 6px 18px rgba(70, 45, 30, 0.12);
+
+}
+
+
+.photo-card img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    opacity:
+        0;
+
+    transition:
+        opacity 0.5s ease;
+
+}
+
+
+.photo-card img.captured {
+
+    opacity:
+        1;
+
+}
+
+
+.photo-number {
+
+    position:
+        absolute;
+
+    top:
+        8px;
+
+    left:
+        8px;
+
+    z-index:
+        2;
+
+    background:
+        rgba(255, 255, 255, 0.9);
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        6px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* ==========================================
+   FILTER SECTION
+========================================== */
+
+.filter-section {
+
+    display:
+        none;
+
+    background:
+        #f8f1e7;
+
+    padding:
+        30px;
+
+    border-radius:
+        20px;
+
+    margin-bottom:
+        25px;
+
+    text-align:
+        center;
+
+    animation:
+        fadeUp 0.6s ease;
+
+}
+
+
+.filter-section.visible {
+
+    display:
+        block;
+
+}
+
+
+/* ==========================================
+   FILTER GRID
+========================================== */
+
+.filter-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        16px;
+
+    margin-top:
+        20px;
+
+}
+
+
+.filter-option {
+
+    position:
+        relative;
+
+    border:
+        2px solid transparent;
+
+    background:
+        #fffaf4;
+
+    padding:
+        8px;
+
+    border-radius:
+        12px;
+
+    transition:
+        0.25s ease;
+
+    overflow:
+        hidden;
+
+}
+
+
+.filter-option:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 8px 20px rgba(70, 45, 30, 0.13);
+
+}
+
+
+.filter-option.active {
+
+    border-color:
+        #684c39;
+
+    box-shadow:
+        0 0 0 3px rgba(104, 76, 57, 0.12);
+
+}
+
+
+.filter-photo-preview {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        3px;
+
+    width:
+        100%;
+
+    aspect-ratio:
+        3 / 2;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        8px;
+
+    background:
+        #ddd;
+
+}
+
+
+.filter-photo-preview img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+
+}
+
+
+.filter-name {
+
+    display:
+        block;
+
+    margin-top:
+        9px;
+
+    padding:
+        2px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    color:
+        #594536;
+
+}
+
+
+/* ==========================================
+   FILTER ACTION
+========================================== */
+
+.filter-action {
+
+    margin-top:
+        25px;
+
+}
+
+
+.filter-action p {
+
+    font-size:
+        13px;
+
+    color:
+        #806b58;
+
+    margin-bottom:
+        15px;
+
+}
+
+
+.filter-action strong {
+
+    color:
+        #4b382c;
+
+}
+
+
+/* ==========================================
+   FINAL SECTION
+========================================== */
+
+.final-section {
+
+    display:
+        none;
+
+    background:
+        #f8f1e7;
+
+    padding:
+        35px;
+
+    border-radius:
+        20px;
+
+    text-align:
+        center;
+
+    margin-bottom:
+        25px;
+
+    animation:
+        fadeUp 0.7s ease;
+
+}
+
+
+.final-section.visible {
+
+    display:
+        block;
+
+}
+
+
+.selected-filter {
+
+    display:
+        inline-block;
+
+    background:
+        #eadfd2;
+
+    padding:
+        9px 15px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        12px;
+
+    margin-bottom:
+        20px;
+
+}
+
+
+/* ==========================================
+   FINAL TEMPLATE
+========================================== */
+
+.template-wrapper {
+
+    width:
+        100%;
+
+    max-width:
+        700px;
+
+    margin:
+        auto;
+
+    padding:
+        15px;
+
+    background:
+        white;
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 12px 35px rgba(70, 45, 30, 0.18);
+
+}
+
+
+.template-wrapper img {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        auto;
+
+    border-radius:
+        5px;
+
+}
+
+
+/* ==========================================
+   FINAL BUTTONS
+========================================== */
+
+.final-controls {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        12px;
+
+    margin-top:
+        22px;
+
+}
+
+
+.secondary-button {
+
+    border:
+        1px solid #9c826d;
+
+    background:
+        transparent;
+
+    color:
+        #684c39;
+
+    padding:
+        13px 23px;
+
+    border-radius:
+        10px;
+
+    font-weight:
+        700;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.secondary-button:hover {
+
+    background:
+        #eadfd2;
+
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+#status {
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
+
+    color:
+        #806b58;
+
+    padding:
+        10px;
+
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes fadeDown {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-20px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(20px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+@keyframes countdownPop {
+
+    0% {
+
+        opacity:
+            0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.4);
+
+    }
+
+    35% {
+
+        opacity:
+            1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.15);
+
+    }
+
+    70% {
+
+        opacity:
+            1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+
+    }
+
+    100% {
+
+        opacity:
+            0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.3);
+
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 800px) {
+
+    .filter-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    body {
+
+        padding:
+            20px 10px;
+
+    }
+
+
+    header h1 {
+
+        font-size:
+            44px;
+
+    }
+
+
+    .camera-section,
+    .captured-section,
+    .filter-section,
+    .final-section {
+
+        padding:
+            20px;
+
+    }
+
+
+    video {
+
+        min-height:
+            250px;
+
+    }
+
+
+    .photo-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .filter-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            12px;
+
+    }
+
+
+    .countdown {
+
+        font-size:
+            80px;
+
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .filter-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .filter-name {
+
+        font-size:
+            10px;
+
+    }
+
+}

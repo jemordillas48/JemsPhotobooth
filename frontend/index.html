@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jem's Photobooth</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+
+            <div class="camera-icon">
+                📸
+            </div>
+
+            <h1>
+                Jem's Photobooth
+            </h1>
+
+            <p>
+                Capture three moments. Keep one memory.
+            </p>
+
+        </header>
+
+
+        <!-- CAMERA -->
+        <section class="camera-section">
+
+            <div class="camera-frame">
+
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline
+                ></video>
+
+                <canvas id="canvas"></canvas>
+
+                <div
+                    id="countdown"
+                    class="countdown"
+                >
+                    3
+                </div>
+
+            </div>
+
+
+            <div class="controls">
+
+                <button
+                    id="startCamera"
+                    class="primary-button"
+                >
+                    Start Camera
+                </button>
+
+
+                <button
+                    id="startSession"
+                    class="primary-button"
+                    disabled
+                >
+                    📸 Start 3-Photo Session
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROGRESS -->
+        <section class="photo-progress">
+
+            <div class="progress-title">
+
+                <span>
+                    Photo Session
+                </span>
+
+                <strong id="photoCounter">
+                    0 / 3
+                </strong>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div
+                    id="progressFill"
+                    class="progress-fill"
+                ></div>
+
+            </div>
+
+
+            <div class="photo-dots">
+
+                <span
+                    id="dot1"
+                    class="photo-dot"
+                >
+                    1
+                </span>
+
+                <span
+                    id="dot2"
+                    class="photo-dot"
+                >
+                    2
+                </span>
+
+                <span
+                    id="dot3"
+                    class="photo-dot"
+                >
+                    3
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- CAPTURED PHOTOS -->
+        <section class="captured-section">
+
+            <h2>
+                Your Photos
+            </h2>
+
+            <p class="section-description">
+                Your three captured moments will appear here.
+            </p>
+
+
+            <div class="photo-grid">
+
+                <div class="photo-card">
+
+                    <span class="photo-number">
+                        01
+                    </span>
+
+                    <img
+                        id="photo1"
+                        alt="Photo 1"
+                    >
+
+                </div>
+
+
+                <div class="photo-card">
+
+                    <span class="photo-number">
+                        02
+                    </span>
+
+                    <img
+                        id="photo2"
+                        alt="Photo 2"
+                    >
+
+                </div>
+
+
+                <div class="photo-card">
+
+                    <span class="photo-number">
+                        03
+                    </span>
+
+                    <img
+                        id="photo3"
+                        alt="Photo 3"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="finalizeButton"
+                class="finalize-button"
+                disabled
+            >
+                ✨ Finalize Photos
+            </button>
+
+        </section>
+
+
+        <!-- FILTER SECTION -->
+        <section
+            id="filter-section"
+            class="filter-section"
+        >
+
+            <h2>
+                Choose Your Filter
+            </h2>
+
+            <p class="section-description">
+                Preview your actual photos with each filter.
+            </p>
+
+
+            <div class="filter-grid">
+
+
+                <!-- ORIGINAL -->
+                <button
+                    class="filter-option active"
+                    data-filter="original"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-original-1">
+                        <img id="preview-original-2">
+                        <img id="preview-original-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Original
+                    </span>
+
+                </button>
+
+
+                <!-- VINTAGE -->
+                <button
+                    class="filter-option"
+                    data-filter="vintage"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-vintage-1">
+                        <img id="preview-vintage-2">
+                        <img id="preview-vintage-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Vintage
+                    </span>
+
+                </button>
+
+
+                <!-- BLACK AND WHITE -->
+                <button
+                    class="filter-option"
+                    data-filter="bw"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-bw-1">
+                        <img id="preview-bw-2">
+                        <img id="preview-bw-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Black & White
+                    </span>
+
+                </button>
+
+
+                <!-- SEPIA -->
+                <button
+                    class="filter-option"
+                    data-filter="sepia"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-sepia-1">
+                        <img id="preview-sepia-2">
+                        <img id="preview-sepia-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Sepia
+                    </span>
+
+                </button>
+
+
+                <!-- WARM -->
+                <button
+                    class="filter-option"
+                    data-filter="warm"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-warm-1">
+                        <img id="preview-warm-2">
+                        <img id="preview-warm-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Warm
+                    </span>
+
+                </button>
+
+
+                <!-- COOL -->
+                <button
+                    class="filter-option"
+                    data-filter="cool"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-cool-1">
+                        <img id="preview-cool-2">
+                        <img id="preview-cool-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Cool
+                    </span>
+
+                </button>
+
+
+                <!-- BRIGHT -->
+                <button
+                    class="filter-option"
+                    data-filter="bright"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-bright-1">
+                        <img id="preview-bright-2">
+                        <img id="preview-bright-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Bright
+                    </span>
+
+                </button>
+
+
+                <!-- CONTRAST -->
+                <button
+                    class="filter-option"
+                    data-filter="contrast"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-contrast-1">
+                        <img id="preview-contrast-2">
+                        <img id="preview-contrast-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Contrast
+                    </span>
+
+                </button>
+
+
+                <!-- FADE -->
+                <button
+                    class="filter-option"
+                    data-filter="fade"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-fade-1">
+                        <img id="preview-fade-2">
+                        <img id="preview-fade-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Fade
+                    </span>
+
+                </button>
+
+
+                <!-- DRAMATIC -->
+                <button
+                    class="filter-option"
+                    data-filter="dramatic"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-dramatic-1">
+                        <img id="preview-dramatic-2">
+                        <img id="preview-dramatic-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Dramatic
+                    </span>
+
+                </button>
+
+
+                <!-- ROSE -->
+                <button
+                    class="filter-option"
+                    data-filter="rose"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-rose-1">
+                        <img id="preview-rose-2">
+                        <img id="preview-rose-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Rose
+                    </span>
+
+                </button>
+
+
+                <!-- GOLDEN -->
+                <button
+                    class="filter-option"
+                    data-filter="golden"
+                >
+
+                    <div class="filter-photo-preview">
+
+                        <img id="preview-golden-1">
+                        <img id="preview-golden-2">
+                        <img id="preview-golden-3">
+
+                    </div>
+
+                    <span class="filter-name">
+                        Golden
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <div class="filter-action">
+
+                <p>
+                    Selected:
+                    <strong id="selectedFilter">
+                        Original
+                    </strong>
+                </p>
+
+                <button
+                    id="applyFilterButton"
+                    class="apply-filter-button"
+                >
+                    ✨ Apply Filter & Create Template
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL PHOTO -->
+        <section
+            id="final-section"
+            class="final-section"
+        >
+
+            <h2>
+                Your Final Photobooth
+            </h2>
+
+
+            <p class="section-description">
+                Your filtered photos have been combined
+                into one beautiful strip.
+            </p>
+
+
+            <div class="selected-filter">
+
+                Filter:
+                <strong id="finalSelectedFilter">
+                    Original
+                </strong>
+
+            </div>
+
+
+            <div class="template-wrapper">
+
+                <img
+                    id="finalPreview"
+                    alt="Final photobooth template"
+                >
+
+            </div>
+
+
+            <div class="final-controls">
+
+                <button
+                    id="savePhoto"
+                    class="primary-button"
+                >
+                    💾 Save Photo
+                </button>
+
+
+                <button
+                    id="newSession"
+                    class="secondary-button"
+                >
+                    ↻ New Session
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATUS -->
+        <p id="status">
+            Ready when you are.
+        </p>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
