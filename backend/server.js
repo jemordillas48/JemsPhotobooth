@@ -5,16 +5,25 @@ const fs = require("fs");
 
 const app = express();
 
-const PORT = 3000;
+// ==========================================
+// PORT
+// ==========================================
+
+// Render provides its own PORT.
+// When running locally, it will use 3000.
+const PORT = process.env.PORT || 3000;
 
 
-// =====================================================
+// ==========================================
 // FOLDER PATHS
-// =====================================================
+// ==========================================
 
 const frontendPath = path.join(__dirname, "../frontend");
 
-const uploadsPath = path.join(__dirname, "uploads");
+const uploadsPath = path.join(
+    __dirname,
+    "uploads"
+);
 
 const databasePath = path.join(
     __dirname,
@@ -23,33 +32,43 @@ const databasePath = path.join(
 );
 
 
-// =====================================================
+// ==========================================
 // CREATE REQUIRED FOLDERS
-// =====================================================
+// ==========================================
 
 if (!fs.existsSync(uploadsPath)) {
-    fs.mkdirSync(uploadsPath, { recursive: true });
+    fs.mkdirSync(uploadsPath, {
+        recursive: true
+    });
 }
 
-const databaseFolder = path.dirname(databasePath);
+const databaseFolder = path.dirname(
+    databasePath
+);
 
 if (!fs.existsSync(databaseFolder)) {
-    fs.mkdirSync(databaseFolder, { recursive: true });
+    fs.mkdirSync(databaseFolder, {
+        recursive: true
+    });
 }
 
 
-// =====================================================
+// ==========================================
 // MIDDLEWARE
-// =====================================================
+// ==========================================
 
-// Allow JSON data and large Base64 images
-app.use(express.json({
-    limit: "20mb"
-}));
+// Allow large Base64 image data
+app.use(
+    express.json({
+        limit: "20mb"
+    })
+);
 
 
 // Serve frontend
-app.use(express.static(frontendPath));
+app.use(
+    express.static(frontendPath)
+);
 
 
 // Serve uploaded photos
@@ -59,9 +78,9 @@ app.use(
 );
 
 
-// =====================================================
+// ==========================================
 // DATABASE CONNECTION
-// =====================================================
+// ==========================================
 
 const db = new sqlite3.Database(
     databasePath,
@@ -86,9 +105,9 @@ const db = new sqlite3.Database(
 );
 
 
-// =====================================================
+// ==========================================
 // CREATE PHOTOS TABLE
-// =====================================================
+// ==========================================
 
 db.run(
     `
@@ -127,22 +146,25 @@ db.run(
 );
 
 
-// =====================================================
+// ==========================================
 // HOME PAGE
-// =====================================================
+// ==========================================
 
 app.get("/", (req, res) => {
 
     res.sendFile(
-        path.join(frontendPath, "index.html")
+        path.join(
+            frontendPath,
+            "index.html"
+        )
     );
 
 });
 
 
-// =====================================================
+// ==========================================
 // TEST API
-// =====================================================
+// ==========================================
 
 app.get("/api/test", (req, res) => {
 
@@ -158,15 +180,19 @@ app.get("/api/test", (req, res) => {
 });
 
 
-// =====================================================
+// ==========================================
 // SAVE PHOTO
-// =====================================================
+// ==========================================
 
 app.post("/api/photos", (req, res) => {
 
     try {
 
-        const { image } = req.body;
+        const {
+            image,
+            style,
+            createdAt
+        } = req.body;
 
 
         // Check if image exists
@@ -176,14 +202,15 @@ app.post("/api/photos", (req, res) => {
 
                 success: false,
 
-                message: "No image was received."
+                message:
+                    "No image was received."
 
             });
 
         }
 
 
-        // Check that the image is PNG or JPEG
+        // Check image format
         const imageMatch = image.match(
             /^data:image\/(png|jpeg|jpg);base64,(.+)$/
         );
@@ -208,7 +235,7 @@ app.post("/api/photos", (req, res) => {
         const imageData = imageMatch[2];
 
 
-        // Generate unique filename
+        // Create unique filename
         const timestamp = Date.now();
 
         const extension =
@@ -222,12 +249,18 @@ app.post("/api/photos", (req, res) => {
 
 
         const filepath =
-            path.join(uploadsPath, filename);
+            path.join(
+                uploadsPath,
+                filename
+            );
 
 
         // Convert Base64 to image
         const buffer =
-            Buffer.from(imageData, "base64");
+            Buffer.from(
+                imageData,
+                "base64"
+            );
 
 
         // Save image
@@ -241,14 +274,15 @@ app.post("/api/photos", (req, res) => {
         db.run(
             `
             INSERT INTO photos
-            (filename, original_name, filepath)
+            (filename, original_name, filepath, created_at)
 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
             `,
             [
                 filename,
                 filename,
-                `/uploads/${filename}`
+                `/uploads/${filename}`,
+                createdAt || new Date().toISOString()
             ],
             function (error) {
 
@@ -325,9 +359,9 @@ app.post("/api/photos", (req, res) => {
 });
 
 
-// =====================================================
+// ==========================================
 // GET ALL PHOTOS
-// =====================================================
+// ==========================================
 
 app.get("/api/photos", (req, res) => {
 
@@ -376,9 +410,9 @@ app.get("/api/photos", (req, res) => {
 });
 
 
-// =====================================================
+// ==========================================
 // GET ONE PHOTO
-// =====================================================
+// ==========================================
 
 app.get("/api/photos/:id", (req, res) => {
 
@@ -438,16 +472,16 @@ app.get("/api/photos/:id", (req, res) => {
 });
 
 
-// =====================================================
+// ==========================================
 // DELETE PHOTO
-// =====================================================
+// ==========================================
 
 app.delete("/api/photos/:id", (req, res) => {
 
     const id = req.params.id;
 
 
-    // First find photo
+    // Find photo first
     db.get(
         `
         SELECT *
@@ -487,14 +521,21 @@ app.delete("/api/photos/:id", (req, res) => {
             }
 
 
-            // Delete physical file
+            // Get safe filename
             const filename =
-                path.basename(photo.filename);
+                path.basename(
+                    photo.filename
+                );
+
 
             const filepath =
-                path.join(uploadsPath, filename);
+                path.join(
+                    uploadsPath,
+                    filename
+                );
 
 
+            // Delete physical file
             if (fs.existsSync(filepath)) {
 
                 fs.unlinkSync(filepath);
@@ -544,9 +585,9 @@ app.delete("/api/photos/:id", (req, res) => {
 });
 
 
-// =====================================================
+// ==========================================
 // 404 HANDLER
-// =====================================================
+// ==========================================
 
 app.use((req, res) => {
 
@@ -554,31 +595,79 @@ app.use((req, res) => {
 
         success: false,
 
-        message: "Route not found."
+        message:
+            "Route not found."
 
     });
 
 });
 
 
-// =====================================================
+// ==========================================
 // START SERVER
-// =====================================================
+// ==========================================
 
-const server = app.listen(PORT, "127.0.0.1", () => {
+const server = app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    console.log("");
-    console.log("==================================");
-    console.log("       PHOTOBOOTH SERVER");
-    console.log("==================================");
-    console.log(`Server: http://localhost:${PORT}`);
-    console.log(`Photos: ${uploadsPath}`);
-    console.log(`Database: ${databasePath}`);
-    console.log("==================================");
-    console.log("");
-    console.log("Server is running. Keep this terminal open.");
-});
+        console.log("");
 
-server.on("error", (error) => {
-    console.error("SERVER ERROR:", error);
-});
+        console.log(
+            "=================================="
+        );
+
+        console.log(
+            "       PHOTOBOOTH SERVER"
+        );
+
+        console.log(
+            "=================================="
+        );
+
+        console.log(
+            `Server running on port ${PORT}`
+        );
+
+        console.log(
+            `Frontend: ${frontendPath}`
+        );
+
+        console.log(
+            `Photos: ${uploadsPath}`
+        );
+
+        console.log(
+            `Database: ${databasePath}`
+        );
+
+        console.log(
+            "=================================="
+        );
+
+        console.log("");
+
+        console.log(
+            "Server is running."
+        );
+
+    }
+);
+
+
+// ==========================================
+// SERVER ERROR
+// ==========================================
+
+server.on(
+    "error",
+    (error) => {
+
+        console.error(
+            "SERVER ERROR:",
+            error
+        );
+
+    }
+);
